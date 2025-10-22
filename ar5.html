@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>桂林象鼻山AR导览</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5faf5;
+            color: #333;
+            line-height: 1.6;
+            padding: 0;
+            margin: 0;
+            text-align: center;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(22, 160, 133, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(22, 160, 133, 0.05) 0%, transparent 20%);
+            min-height: 100vh;
+        }
+        
+        /* 导航栏样式 */
+        nav {
+            background-color: #16a085;
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+        
+        .nav-links a:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        .hero {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            margin-bottom: 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, #16a085, #1abc9c);
+        }
+        
+        h1 {
+            color: #27ae60;
+            margin-bottom: 1.5rem;
+            font-size: 2.2rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 10%;
+            width: 80%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #16a085, transparent);
+        }
+        
+        h2 {
+            color: #27ae60;
+            margin: 2rem 0 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #eafaf1;
+        }
+        
+        h3 {
+            color: #1e8449;
+            margin: 1.5rem 0 1rem;
+        }
+        
+        p {
+            color: #34495e;
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
+        
+        .ar-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #16a085, #138d75);
+            color: white;
+            padding: 16px 36px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(22, 160, 133, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ar-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(22, 160, 133, 0.4);
+            background: linear-gradient(135deg, #138d75, #0b5345);
+        }
+        
+        .ar-button::after {
+            content: '→';
+            margin-left: 10px;
+            transition: margin-left 0.3s ease;
+        }
+        
+        .ar-button:hover::after {
+            margin-left: 15px;
+        }
+        
+        .instructions {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 25px 0;
+            text-align: left;
+            border-left: 4px solid #16a085;
+            transition: transform 0.3s ease;
+        }
+        
+        .instructions:hover {
+            transform: translateX(5px);
+        }
+        
+        .instructions h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .instructions h3::before {
+            content: 'ℹ️';
+            margin-right: 10px;
+            font-size: 1.3rem;
+        }
+        
+        .instructions ol {
+            padding-left: 1.5rem;
+        }
+        
+        .instructions li {
+            margin-bottom: 0.8rem;
+            color: #4a5568;
+        }
+        
+        .instructions li strong {
+            color: #2c3e50;
+        }
+        
+        .phone-frame {
+            border: 12px solid #2c3e50;
+            border-radius: 40px;
+            padding: 20px 10px;
+            display: inline-block;
+            margin: 25px 0;
+            background: #f7fafc;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            max-width: 90%;
+        }
+        
+        .phone-frame:hover {
+            transform: scale(1.02) rotate(1deg);
+        }
+        
+        .phone-frame::before {
+            content: '';
+            position: relative;
+            display: block;
+            width: 40%;
+            height: 20px;
+            background: #2c3e50;
+            margin: 0 auto 20px;
+            border-radius: 0 0 15px 15px;
+        }
+        
+        .phone-frame h3 {
+            color: #2c3e50;
+            margin-bottom: 1.2rem;
+        }
+        
+        .info {
+            background: linear-gradient(135deg, #eafaf1, #d5f5e3);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 1px solid #abebc6;
+        }
+        
+        .info h3 {
+            color: #1e8449;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+        
+        .info p {
+            color: #196f3d;
+            margin-bottom: 0;
+        }
+        
+        .features {
+            margin: 30px 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            width: 120px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #16a085;
+        }
+        
+        /* 景点介绍区块 */
+        .attraction {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.07);
+            transition: transform 0.3s ease;
+        }
+        
+        .attraction:hover {
+            transform: translateY(-5px);
+        }
+        
+        .attraction-content {
+            text-align: left;
+            margin-bottom: 1.5rem;
+        }
+        
+        .attraction-link {
+            display: inline-block;
+            color: #16a085;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 16px;
+            border: 2px solid #16a085;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
+        
+        .attraction-link:hover {
+            background-color: #16a085;
+            color: white;
+        }
+        
+        footer {
+            background-color: #16a085;
+            color: white;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero, .attraction {
+                padding: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .phone-frame {
+                border-width: 8px;
+                padding: 15px 5px;
+            }
+            
+            .ar-button {
+                padding: 14px 28px;
+                font-size: 1rem;
+                width: 90%;
+            }
+            
+            .features {
+                gap: 15px;
+            }
+            
+            .feature-card {
+                width: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">桂林象鼻山AR导览</div>
+            <div class="nav-links">
+                <a href="#home">首页</a>
+                <a href="#puxian-tower">普贤塔</a>
+                <a href="#shuiyue-cave">水月洞</a>
+                <a href="#sanhuajiu">三花酒</a>
+                <a href="#ar-experience">AR体验</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- 首页介绍 -->
+        <section id="home" class="hero">
+            <h1>欢迎体验桂林象鼻山AR导览</h1>
+            <p>通过增强现实技术，探索桂林象鼻山的自然奇观与人文历史，感受山水与文化的完美融合。</p>
+            
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <div class="feature-text">实时识别</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🏯</div>
+                    <div class="feature-text">古迹解析</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📜</div>
+                    <div class="feature-text">历史故事</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <div class="feature-text">精准定位</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 普贤塔介绍 -->
+        <section id="puxian-tower" class="attraction">
+            <h2>普贤塔</h2>
+            <div class="attraction-content">
+                <p>塔名直接源自塔身所供普贤菩萨造像，体现大乘佛教"行愿"思想与桂林多元宗教交融特征。</p>
+                <p>第二层龛内普贤菩萨结跏趺坐于六牙白象背上的雕刻图案，与《法华经》所述菩萨乘象云游十方的情节形成呼应。</p>
+                <p>八角须弥座象征佛教"八正道"，双层结构暗合"真俗二谛"教义，整体造型体现明代建筑艺术融合。</p>
+                <p>从漓江东岸眺望，塔身与象鼻山组合形成"宝瓶负象"的独特视觉意象，与山下水月洞构成"象山水月"经典景观。</p>
+            </div>
+            <a href="https://www.kivicube.com/scenes/T07tzyP4K2t6ynRxMNlCn3s8U6942gIU">查看AR导览 →</a>
+        </section>
+
+        <!-- 水月洞介绍 -->
+        <section id="shuiyue-cave" class="attraction">
+            <h2>水月洞</h2>
+            <div class="attraction-content">
+                <p>水月洞位于广西桂林漓江象鼻山山体与象腿之间，形成于约1.2万年前地壳抬升与漓江河道缩小的地质作用，属东西贯通的石灰岩穿洞，长17米、宽9.5米、高12米，面积约150平方米。</p>
+                <p>《象山记》载“有石穴一，彼此可以相望，形圆而长，其半入于漓水中，水时高时下，故其穴亦时有大小”，江水穿流形成“象山水月”奇观，为桂林山水象征。</p>
+            </div>
+            <a href="https://www.kivicube.com/scenes/8DZ9SkH8ilvS395snrwtoH5D9i9z8XSH">查看AR导览 →</a>
+        </section>
+
+        <!-- 桂林三花酒介绍 -->
+        <section id="sanhuajiu" class="attraction">
+            <h2>桂林三花酒</h2>
+            <div class="attraction-content">
+                <p>桂林三花酒源于唐宋，桂林的酿酒作坊都把酿好的美酒窖藏于象鼻山岩洞酒窖中。</p>
+                <p>象山酒窖恒温恒湿，冬暖夏凉。经过上千年的无断代传承，象鼻山酒窖的石壁上凝结了无数的酒的活性霉菌，形成了特别适于藏酒的“小气候”，特别利于酒的醇化和老熟，是任何新岩洞藏酒效果所无法比拟的。</p>
+                <p>桂林三花酒经过象山酒窖洞藏老熟，有“洞中方一日，世上已千年”的奇迹。其次，源于洞藏桂林三花酒的工艺独特。</p>
+            </div>
+            <a href="pages/kivicube/scene?sanhuajiu" class="attraction-link">查看AR导览 →</a>
+        </section>
+
+        <!-- AR体验入口 -->
+        <section id="ar-experience" class="hero">
+            <h2>开启AR导览体验</h2>
+            <div class="instructions">
+                <h3>使用说明：</h3>
+                <ol>
+                    <li>使用<strong>手机浏览器</strong>打开此页面</li>
+                    <li>点击下方的「开启AR体验」按钮</li>
+                    <li>允许浏览器使用摄像头权限</li>
+                    <li>将摄像头对准目标图像或空间</li>
+                    <li>移动设备探索增强现实内容</li>
+                </ol>
+            </div>
+
+            <div class="phone-frame">
+                <h3>点击按钮开始AR之旅</h3>
+                <a href="https://www.kivicube.com/scenes/bXq1IAC8Gh4RRmGWeE6058VqA0Z03Lfa"_blank">
+                    开启AR体验
+                </a>
+                <p><small>（将在新页面中打开）</small></p>
+            </div>
+
+            <div class="info">
+                <h3>温馨提示</h3>
+                <p>确保在光线充足的环境下使用<br>
+                保持设备稳定以获得更好效果<br>
+                建议使用最新版Chrome或Safari浏览器</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="footer-content">
+            <p>桂林象鼻山AR导览 &copy; 2023</p>
+            <p>探索山水文化，体验科技魅力</p>
+        </div>
+    </footer>
+</body>
+</html>
